@@ -28,7 +28,7 @@ Login using SSH and find the password in the readme file.
 - Read the readme file to get the password
 
 **Screenshot:**
-![Level 0](screenshots/level0.png)
+![Level 0](level0.png)
 
 --------------------------------------------------
 
