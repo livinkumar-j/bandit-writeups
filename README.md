@@ -1,4 +1,3 @@
-# bandit-writeups
 # OverTheWire Bandit Writeups (Level 0–20)
 Author: Livinkumar J
 
