@@ -5,11 +5,12 @@ This repository contains my learning notes and solutions for OverTheWire Bandit 
 
 Skills Practiced:
 - Linux commands
-- File reading techniques
+- File handling
 - Permissions
-- SSH usage
-- Basic enumeration
-- Problem-solving mindset
+- SSH
+- Searching & filtering
+- Encoding/decoding
+- Networking basics
 
 Note: Passwords are not shared for ethical reasons.
 
@@ -17,312 +18,319 @@ Note: Passwords are not shared for ethical reasons.
 
 ## Level 0 → Level 1
 
-**Goal:**
-Login using SSH and find the password in the readme file.
+Goal: Login using SSH and read the readme file.
 
-**Commands Used:**
+Commands Used:
+ssh bandit0@bandit.labs.overthewire.org -p 2220  
+ls  
+cat readme  
 
-**Explanation:**
-- Connected using SSH
-- Listed files
-- Read the readme file to get the password
+Explanation:
+- Connected to Bandit server using SSH
+- Listed files using ls
+- Opened readme file to get password
 
-**Screenshot:**
-![Level 0](level0.png)
+Screenshot:
+![Level 0](lvel0.png)
 
 --------------------------------------------------
 
 ## Level 1 → Level 2
 
-**Goal:**
-Password stored in a file named "-"
+Goal: Password stored in file named "-"
 
-**Commands Used:**
+Commands Used:
+ls  
+cat ./-  
 
-**Explanation:**
-- File name starts with "-"
-- Used ./ to avoid confusion with command options
+Explanation:
+- "-" is treated as option
+- Used ./ to read file safely
 
-**Screenshot:**
-![Level 1](screenshots/level1.png)
+Screenshot:
+![Level 1](lvel1.png)
 
 --------------------------------------------------
 
 ## Level 2 → Level 3
 
-**Goal:**
-Password stored in a file with spaces in the name
+Goal: File name contains spaces
 
-**Commands Used:**
+Commands Used:
+ls  
+cat "spaces in this filename"  
 
-**Explanation:**
-- Used quotes to handle spaces in file name
+Explanation:
+- Used quotes to handle spaces
 
-**Screenshot:**
-![Level 2](screenshots/level2.png)
+Screenshot:
+![Level 2](lvel2.png)
 
 --------------------------------------------------
 
 ## Level 3 → Level 4
 
-**Goal:**
-Password inside a hidden file
+Goal: Password inside hidden file
 
-**Commands Used:**
+Commands Used:
+ls -a  
+cat .hidden  
 
-**Explanation:**
-- Used -a to show hidden files
+Explanation:
+- -a shows hidden files
 
-**Screenshot:**
-![Level 3](screenshots/level3.png)
+Screenshot:
+![Level 3](lvel3.png)
 
 --------------------------------------------------
 
 ## Level 4 → Level 5
 
-**Goal:**
-Find password in human-readable file
+Goal: Find human-readable file
 
-**Commands Used:**
+Commands Used:
+ls  
+file ./*  
+cat ./-file07  
 
-**Explanation:**
+Explanation:
 - Used file command to identify readable file
-- Opened correct file
 
-**Screenshot:**
-![Level 4](screenshots/level4.png)
+Screenshot:
+![Level 4](lvel4.png)
 
 --------------------------------------------------
 
 ## Level 5 → Level 6
 
-**Goal:**
-Find file with:
-- Human-readable
-- 1033 bytes
-- Not executable
+Goal: Find file with:
+- size 1033 bytes
+- not executable
+- human readable
 
-**Commands Used:**
+Commands Used:
+find . -type f -size 1033c ! -executable  
+cat <filename>  
 
-**Explanation:**
-- Used find to search with conditions
+Explanation:
+- Used find with conditions
 
-**Screenshot:**
-![Level 5](screenshots/level5.png)
+Screenshot:
+![Level 5](lvel5.png)
 
 --------------------------------------------------
 
 ## Level 6 → Level 7
 
-**Goal:**
-Find file owned by user bandit7 and group bandit6
+Goal: Find file owned by bandit7 & group bandit6
 
-**Commands Used:**
+Commands Used:
+find / -user bandit7 -group bandit6 -size 33c 2>/dev/null  
+cat <file>  
 
-**Explanation:**
-- Used find across system
+Explanation:
+- Searched entire system
 - Ignored permission errors
 
-**Screenshot:**
-![Level 6](screenshots/level6.png)
+Screenshot:
+![Level 6](lvel6.png)
 
 --------------------------------------------------
 
 ## Level 7 → Level 8
 
-**Goal:**
-Password stored in data.txt next to word "millionth"
+Goal: Password near word "millionth"
 
-**Commands Used:**
+Commands Used:
+grep millionth data.txt  
 
-**Explanation:**
-- Used grep to search keyword
+Explanation:
+- Used grep to find keyword
 
-**Screenshot:**
-![Level 7](screenshots/level7.png)
+Screenshot:
+![Level 7](lvel7.png)
 
 --------------------------------------------------
 
 ## Level 8 → Level 9
 
-**Goal:**
-Password is the only unique line
+Goal: Find unique line
 
-**Commands Used:**
+Commands Used:
+sort data.txt | uniq -u  
 
-**Explanation:**
-- Sorted lines
+Explanation:
+- Sorted data
 - Found unique value
 
-**Screenshot:**
-![Level 8](screenshots/level8.png)
+Screenshot:
+![Level 8](lvel8.png)
 
 --------------------------------------------------
 
 ## Level 9 → Level 10
 
-**Goal:**
-Password in binary file next to "="
+Goal: Password inside binary file
 
-**Commands Used:**
+Commands Used:
+strings data.txt | grep "="  
 
-**Explanation:**
+Explanation:
 - Extracted readable text from binary
 
-**Screenshot:**
-![Level 9](screenshots/level9.png)
+Screenshot:
+![Level 9](lvel9.png)
 
 --------------------------------------------------
 
 ## Level 10 → Level 11
 
-**Goal:**
-Password encoded with base64
+Goal: Base64 encoded password
 
-**Commands Used:**
+Commands Used:
+base64 -d data.txt  
 
-**Explanation:**
-- Decoded base64 content
+Explanation:
+- Decoded Base64 content
 
-**Screenshot:**
-![Level 10](screenshots/level10.png)
+Screenshot:
+![Level 10](lvel10.png)
 
 --------------------------------------------------
 
 ## Level 11 → Level 12
 
-**Goal:**
-Password encrypted with ROT13
+Goal: ROT13 encrypted text
 
-**Commands Used:**
+Commands Used:
+cat data.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'  
 
-**Explanation:**
-- Used ROT13 decryption
+Explanation:
+- Applied ROT13 decoding
 
-**Screenshot:**
-![Level 11](screenshots/level11.png)
+Screenshot:
+![Level 11](lvel11.png)
 
 --------------------------------------------------
 
 ## Level 12 → Level 13
 
-**Goal:**
-Multiple compression layers
+Goal: Multiple compressed layers
 
-**Commands Used:**
+Commands Used:
+xxd -r data.txt > file  
+gzip -d  
+bzip2 -d  
+tar -xvf  
 
-**Explanation:**
+Explanation:
 - Reversed hex dump
-- Extracted multiple compressed files
+- Extracted compressed layers step by step
 
-**Screenshot:**
-![Level 12](screenshots/level12.png)
+Screenshot:
+![Level 12](lvel12.png)
 
 --------------------------------------------------
 
 ## Level 13 → Level 14
 
-**Goal:**
-Use SSH private key
+Goal: Login using private SSH key
 
-**Commands Used:**
+Commands Used:
+ssh -i sshkey.private bandit14@localhost -p 2220  
 
-**Explanation:**
-- Logged in using private key
+Explanation:
+- Used private key authentication
 
-**Screenshot:**
-![Level 13](screenshots/level13.png)
+Screenshot:
+![Level 13](lvel13.png)
 
 --------------------------------------------------
 
 ## Level 14 → Level 15
 
-**Goal:**
-Submit password via netcat
+Goal: Send password to port using netcat
 
-**Commands Used:**
+Commands Used:
+nc localhost 30000  
 
-**Explanation:**
-- Sent password to port
+Explanation:
+- Sent password to service running on port
 
-**Screenshot:**
-![Level 14](screenshots/level14.png)
+Screenshot:
+![Level 14](lvel14.png)
 
 --------------------------------------------------
 
 ## Level 15 → Level 16
 
-**Goal:**
-Use SSL connection
+Goal: Connect using SSL
 
-**Commands Used:**
+Commands Used:
+openssl s_client -connect localhost:30001  
 
-**Explanation:**
-- Used encrypted connection
+Explanation:
+- Connected using encrypted SSL session
 
-**Screenshot:**
-![Level 15](screenshots/level15.png)
+Screenshot:
+![Level 15](lvel15.png)
 
 --------------------------------------------------
 
 ## Level 16 → Level 17
 
-**Goal:**
-Find correct port using nmap
+Goal: Find correct port using nmap
 
-**Commands Used:**
+Commands Used:
+nmap -p 31000-32000 localhost  
 
-**Explanation:**
-- Scanned ports
-- Found correct SSL service
+Explanation:
+- Scanned ports to find SSL service
 
-**Screenshot:**
-![Level 16](screenshots/level16.png)
+Screenshot:
+![Level 16](lvel16.png)
 
 --------------------------------------------------
 
 ## Level 17 → Level 18
 
-**Goal:**
-Find difference between files
+Goal: Compare two files
 
-**Commands Used:**
+Commands Used:
+diff passwords.old passwords.new  
 
-**Explanation:**
-- Compared files
-- Found changed password
+Explanation:
+- Found changed line using diff
 
-**Screenshot:**
-![Level 17](screenshots/level17.png)
+Screenshot:
+![Level 17](lvel17.png)
 
 --------------------------------------------------
 
 ## Level 18 → Level 19
 
-**Goal:**
-Bypass restricted shell
+Goal: Bypass restricted shell
 
-**Commands Used:**
+Commands Used:
+ssh bandit18@bandit.labs.overthewire.org -p 2220 "cat readme"  
 
-**Explanation:**
+Explanation:
 - Executed command during login
 
-**Screenshot:**
-![Level 18](screenshots/level18.png)
+Screenshot:
+![Level 18](lvel18.png)
 
 --------------------------------------------------
 
 ## Level 19 → Level 20
 
-**Goal:**
-Use setuid binary
+Goal: Use setuid binary
 
-**Commands Used:**
+Commands Used:
+./bandit20-do cat /etc/bandit_pass/bandit20  
 
-**Explanation:**
+Explanation:
 - Used special binary to read protected file
 
-**Screenshot:**
-![Level 19](screenshots/level19.png)
-
---------------------------------------------------
+Screenshot:
+![Level 19](lvel19.png)
